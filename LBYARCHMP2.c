@@ -6,23 +6,24 @@
 // Function prototypes
 void calculate_distances_c(int n, double* x1, double* x2, double* y1, double* y2, double* z);
 extern void calculate_distances_asm(int n, double* x1, double* x2, double* y1, double* y2, double* z);
+
 void initialize_vectors(int n, double* x1, double* x2, double* y1, double* y2);
 double get_execution_time(clock_t start, clock_t end);
 void verify_correctness(int n, double* z_c, double* z_asm);
 void run_performance_test(int n);
 
 int main() {
-    printf("Distance Calculator Kernel - SIMD Implementation\n");
-    printf("Submitted By: Jherby Jaime and Maikael Paule\n");
+    printf("==============================================\n");
+    printf("  Distance Calculator Kernel - SIMD Version\n");
+    printf("  Submitted By: Jherby Jaime and Maikael Paule\n");
     printf("==============================================\n\n");
     
     // Test with example data first for correctness verification
     printf("=== CORRECTNESS VERIFICATION ===\n");
-    run_performance_test(4); // Test with example data
-    
-    printf("\n=== PERFORMANCE TESTING ===\n");
+    run_performance_test(4); 
     
     // Test with different vector sizes (reduced to avoid memory issues)
+    printf("\n=== PERFORMANCE TESTING ===\n");
     int test_sizes[] = {
         1048576,    // 2^20
         16777216    // 2^24
@@ -110,7 +111,6 @@ void run_performance_test(int n) {
     printf("C version average time:        %.6f ms\n", time_c * 1000);
     printf("x86-64 Assembly average time:  %.6f ms\n", time_asm * 1000);
     
-    
     // Clean up memory
     free(x1);
     free(x2);
@@ -122,40 +122,37 @@ void run_performance_test(int n) {
 
 void verify_correctness(int n, double* z_c, double* z_asm) {
     int correct = 1;
-    int display_count = 10;
+    int display_count = (n < 10) ? n : 10;
     int i;
-    
+
     printf("\nCorrectness Verification:\n");
-    printf("Displaying first %d elements of vector Z:\n", display_count);
-    
-    printf("C version (first %d elements):        ", display_count);
+    printf("Displaying first %d elements of vector Z:\n\n", display_count);
+
+    printf("Index    |    C version    |  x86-64 version\n");
+    printf("--------------------------------------------\n");
     for (i = 0; i < display_count; i++) {
-        printf("%.8f ", z_c[i]);
+        printf("  %-6d |  %-14.8f |  %-14.8f\n", i, z_c[i], z_asm[i]);
     }
-    printf("\n");
-    
-    printf("x86-64 version (first %d elements):   ", display_count);
-    for (i = 0; i < display_count; i++) {
-        printf("%.8f ", z_asm[i]);
-    }
-    printf("\n");
-    
+    printf("--------------------------------------------\n");
+
     // Check all elements for correctness
     for (i = 0; i < n; i++) {
-        if (fabs(z_c[i] - z_asm[i]) > 1e-10) {
+        double diff = fabs(z_c[i] - z_asm[i]);
+        if (diff > 1e-10) {
             correct = 0;
-            printf("Mismatch at index %d: C=%.10f, ASM=%.10f, diff=%.2e\n", 
-                   i, z_c[i], z_asm[i], fabs(z_c[i] - z_asm[i]));
+            printf("❌ Mismatch at index %d: C=%.10f, ASM=%.10f, diff=%.2e\n", 
+                   i, z_c[i], z_asm[i], diff);
             break;
         }
     }
-    
+
     printf("Correctness check: %s\n", correct ? "PASSED" : "FAILED");
-    
+
     if (n == 4 && correct) {
-        printf("? Results match specification expected values\n");
+        printf(" Results matched the expected specification values.\n");
     }
 }
+
 
 // C version using standard math library
 void calculate_distances_c(int n, double* x1, double* x2, double* y1, double* y2, double* z) {
