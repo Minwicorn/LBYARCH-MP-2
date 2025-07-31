@@ -37,10 +37,18 @@ The SIMD-optimized x86-64 assembly kernel demonstrates a significant performance
 
 Interestingly, both versions produced identical results in the correctness checks, validating the functional equivalence of the SIMD and C kernels. The consistent speedup observed across different vector sizes confirms the scalability of the SIMD approach. Overall, this highlights how low-level optimization through assembly and SIMD can yield substantial performance gains for compute-intensive numerical tasks, especially when processing large volumes of data.
 
-# Performance Test Snapshot
-
-
-
 # Correctness Snapshot
+![Correctness 1](snapshots/Correctness 1.png)
+
+![Correctness 2](snapshots/Correctness 2.png)
+
+![Correctness 3](snapshots/Correctness 3.png)
+
+# Performance Snapshot
+![Performance 1](snapshots/Performance 1.png)
+
+![Performance 2](snapshots/Performance 2.png)
+
+![Performance 3](snapshots/Performance 3.png)
 
 
